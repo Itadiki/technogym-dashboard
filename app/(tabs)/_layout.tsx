@@ -72,6 +72,13 @@ function TabsLayout() {
           tabBarIcon: ({ focused }) => <TabIcon emoji="💪" focused={focused} />,
         }}
       />
+      <Tabs.Screen
+        name="machines"
+        options={{
+          title: 'Machines',
+          tabBarIcon: ({ focused }) => <TabIcon emoji="🎯" focused={focused} />,
+        }}
+      />
     </Tabs>
   );
 }

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useAppStore } from '../store/appStore';
 import type { Activity, BiometricEntry } from '../types/domain';
+import { buildMachineSummaries, type MachineSummary } from '../lib/machines';
 import { startOfWeek, startOfMonth, groupBy, formatDate, formatWeek, formatMonthYear } from '../lib/utils';
 
 export interface GroupedBar {
@@ -406,4 +407,17 @@ export function useRowingPerformance(): Array<{
       })
       .sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [data, filters.granularity, filters.dateFrom, filters.dateTo]);
+}
+
+// ── Per-machine (strength) progression ─────────────────────────────────────
+
+export function useMachineSummaries(): MachineSummary[] {
+  const { data, filters } = useAppStore();
+  return useMemo(() => {
+    if (!data) return [];
+    const inRange = data.activities.filter((a) =>
+      inDateRange(a.date, filters.dateFrom, filters.dateTo)
+    );
+    return buildMachineSummaries(inRange);
+  }, [data, filters.dateFrom, filters.dateTo]);
 }
